@@ -24,6 +24,32 @@ let entries = [
     }
 ]
 
+app.use(express.json());
+
+const generateID = () => {
+    const num = Math.floor((Math.random() * 10000) % 11111);
+    return num;
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body;
+
+    if (!body) {
+        return response.status(400).json({
+            error: "content missing"
+        });
+    }
+
+    const entry = {
+        id: generateID(),
+        name: body.name,
+        number: body.number
+    }
+
+    entries = entries.concat(entry);
+    response.json(entry);
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(entries);
 })
