@@ -34,10 +34,26 @@ const generateID = () => {
 app.post('/api/persons', (request, response) => {
     const body = request.body;
 
+    const badRequest = (errorMsg) => {
+        response.status(400).json({
+            error: errorMsg
+        })
+    }
+
     if (!body) {
-        return response.status(400).json({
-            error: "content missing"
-        });
+        return badRequest('content missing')
+    }
+    else if (!body.name)
+    {
+        return badRequest('name missing');
+    }
+    else if(!body.number)
+    {
+        return badRequest('number missing');
+    }
+    else if (entries.find(entry => entry.name === body.name))
+    {
+        return badRequest('names must be unique');
     }
 
     const entry = {
